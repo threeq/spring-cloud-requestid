@@ -1,6 +1,6 @@
-# changyi-libs-log
+# spring-cloud-requestid
 
- spring-cloud 请求统一日志 id，通过 x-request-id 请求头部传输
+ spring-cloud 请求全局统一日志 id，通过 x-request-id 请求头部传输
   
 
 # TODO
