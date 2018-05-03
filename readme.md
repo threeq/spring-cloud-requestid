@@ -8,7 +8,7 @@
 - [ ] 支持 okhttp 客户端
 - [ ] 支持 @Scheduled 计划任务
 
-# v0.8.1
+# v1.0.0
 
 * 支持 @Async 异步方法日志
 * 使用 log4j2 支持 json 格式输出
