@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+启动全异步支持，加入以下启动参数
+
+-DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+-->
+<Configuration status="WARN">
+	<Properties>
+		<Property name="PID">????</Property>
+		<Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+		<Property name="LOG_LEVEL_PATTERN">%5p</Property>
+		<Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd HH:mm:ss.SSS</Property>
+		<Property name="FILE_LOG_PATTERN">%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN} ${sys:PID} --- [%t] %-40.40c{1.} : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+	</Properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT" follow="true">
+			<JsonLayout compact="true" eventEol="true" includeLocation="true" stacktraceAsString="true">
+				<KeyValuePair key="time" value="$${date:${LOG_DATEFORMAT_PATTERN}}"/>
+				<KeyValuePair key="requestId" value="$${ctx:RequestId:-}"/>
+			</JsonLayout>
+		</Console>
+		<RollingFile name="FileAppender" fileName="logs/log4j2-demo.log"
+					 filePattern="logs/log4j2-demo-%d{yyyy-MM-dd}-%i.log">
+			<JsonLayout compact="true" eventEol="true" includeLocation="true" stacktraceAsString="true">
+				<KeyValuePair key="time" value="$${date:${LOG_DATEFORMAT_PATTERN}}"/>
+				<KeyValuePair key="requestId" value="$${ctx:RequestId:-}"/>
+			</JsonLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="10"/>
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+		<AsyncLogger name="org.apache.catalina.startup.DigesterFactory" level="error" />
+		<AsyncLogger name="org.apache.catalina.util.LifecycleBase" level="error" />
+		<AsyncLogger name="org.apache.coyote.http11.Http11NioProtocol" level="warn" />
+		<AsyncLogger name="org.apache.sshd.common.util.SecurityUtils" level="warn"/>
+		<AsyncLogger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
+		<AsyncLogger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="error" />
+		<AsyncLogger name="org.hibernate.validator.internal.util.Version" level="warn" />
+		<AsyncLogger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
+		<asyncRoot level="info">
+			<AppenderRef ref="Console" />
+		</asyncRoot>
+	</Loggers>
+</Configuration>
